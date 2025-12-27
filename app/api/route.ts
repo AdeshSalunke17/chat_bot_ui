@@ -10,7 +10,10 @@ export async function POST(request: Request) {
      const req = await request.json();
       const embeddings = new OllamaEmbeddings({
         model: "embeddinggemma",
-        baseUrl: process.env.OLLAMA_API_KEY,
+        baseUrl: process.env.OLLAMA_BASE_URL,
+        headers: {
+          Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`,
+        },
       });
     const pinecone = new PineconeClient({
       apiKey: process.env.PINECONE_API_KEY!
@@ -124,8 +127,11 @@ Answer:
 `);
  const llm = new ChatOllama({
    model: "llama2",
-   baseUrl: process.env.OLLAMA_API_KEY,
+   baseUrl: process.env.OLLAMA_BASE_URL,
    temperature: 0.2,
+   headers: {
+     Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`,
+   },
  });
 const chain = prompt
       .pipe(llm)
