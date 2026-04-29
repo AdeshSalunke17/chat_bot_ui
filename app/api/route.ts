@@ -156,6 +156,6 @@ const chain = prompt
     } catch (error) {
       console.log(error)
         return Response.json({ answer: "Something went wrong while generating the answer.",
-      citations: [] })  
+      citations: [], error: error instanceof Error ? error.message : String(error) })  
     }
 }
