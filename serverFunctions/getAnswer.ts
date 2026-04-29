@@ -14,8 +14,7 @@ export const getAnswer = async (question : string) => {
       baseUrl: "http://localhost:11434",
     });
     const pinecone = new PineconeClient({
-    //   apiKey: process.env.PINECONE_API_KEY!,
-    apiKey :'pcsk_ttJpZ_MsqBHYossTVpMWd34W3jjUTs7wFgEnx5VMSDeaJ76jonPn3FJsgSyaQDasFr37K'
+      apiKey: process.env.PINECONE_API_KEY!,
     });
     const pineconeIndex = pinecone.Index(
     //   process.env.PINECONE_INDEX_NAME!
@@ -65,10 +64,10 @@ Question:
 Answer:
 `);
  const llm = new ChatOllama({
-      model: "llama2",
-      baseUrl: "http://localhost:11434",
-      temperature: 0.2,
-    });
+   model: "llama2",
+   baseUrl: process.env.OLLAMA_BASE_URL,
+   temperature: 0.2,
+ });
 const chain = prompt
       .pipe(llm)
       .pipe(new StringOutputParser());

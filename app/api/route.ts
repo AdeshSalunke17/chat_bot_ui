@@ -3,17 +3,23 @@ import { Pinecone as PineconeClient } from "@pinecone-database/pinecone";
 import { PineconeStore } from "@langchain/pinecone";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { StringOutputParser } from "@langchain/core/output_parsers";
+import { HuggingFaceInferenceEmbeddings } from "@langchain/community/embeddings/hf";
+import { ChatGroq } from "@langchain/groq";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     try {
      const req = await request.json();
-      const embeddings = new OllamaEmbeddings({
-        model: "embeddinggemma",
-        baseUrl: process.env.OLLAMA_BASE_URL,
-        headers: {
-          Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`,
-        },
+      // const embeddings = new OllamaEmbeddings({
+      //   model: "embeddinggemma",
+      //   baseUrl: process.env.OLLAMA_BASE_URL,
+      //   headers: {
+      //     Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`,
+      //   },
+      // });
+      const embeddings = new HuggingFaceInferenceEmbeddings({
+        model: "sentence-transformers/all-MiniLM-L6-v2",
+        apiKey: process.env.HUGGINGFACEHUB_API_KEY,
       });
     const pinecone = new PineconeClient({
       apiKey: process.env.PINECONE_API_KEY!
@@ -125,17 +131,23 @@ Question:
 
 Answer:
 `);
- const llm = new ChatOllama({
-   model: "llama2",
-   baseUrl: process.env.OLLAMA_BASE_URL,
-   temperature: 0.2,
-   headers: {
-     Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`,
-   },
- });
+//  const llm = new ChatOllama({
+//    model: "llama2",
+//    baseUrl: process.env.OLLAMA_BASE_URL,
+//    temperature: 0.2,
+//    headers: {
+//      Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`,
+//    },
+//  });
+const llm = new ChatGroq({
+  apiKey: process.env.GROQ_API_KEY,
+  model: "llama-3.3-70b-versatile",
+  temperature: 0.2,
+});
 const chain = prompt
       .pipe(llm)
       .pipe(new StringOutputParser());
+
       const answer = await chain.invoke({
       context,
       question : req.query,

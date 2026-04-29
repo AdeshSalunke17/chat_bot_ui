@@ -5,12 +5,15 @@
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
-    "start": "next start",
+    "start": "next start -p 4000",
     "lint": "eslint"
   },
   "dependencies": {
     "@ai-sdk/react": "^2.0.118",
-    "@langchain/core": "^1.1.7",
+    "@huggingface/inference": "^4.13.15",
+    "@langchain/community": "^1.1.27",
+    "@langchain/core": "^1.1.42",
+    "@langchain/groq": "^1.2.0",
     "@langchain/ollama": "^1.1.0",
     "@langchain/pinecone": "^1.0.1",
     "@nanostores/react": "github:ai/react",
