@@ -79,12 +79,12 @@ export function ChatDemo() {
       }, [messages, isTyping, shouldAutoScroll]);
   
   return (
-    <>
+    <div className="flex flex-col h-screen">
+      {/* Chat Area */}
       <div
         ref={containerRef}
         onScroll={handleScroll}
-        className="flex flex-col w-full p-10"
-        style={{ marginBottom: "3rem", maxHeight: "calc(100vh - 6rem)" }}
+        className="flex-1 overflow-y-auto px-10 py-6"
       >
         <PromptSuggestions
           label="Get started with some examples"
@@ -96,13 +96,13 @@ export function ChatDemo() {
             "What is Adesh’s tech stack?",
           ]}
         />
+
         <MessageList messages={messages} isTyping={isTyping} />
         <div ref={bottomRef} />
       </div>
-      <div
-        className="fixed bottom-0 px-10 sm:px-2"
-        style={{ width: "-webkit-fill-available" }}
-      >
+
+      {/* Input Area */}
+      <div className="border-t bg-white px-10 py-4 sticky bottom-0">
         <ChatForm
           className="w-full"
           isPending={false}
@@ -123,21 +123,14 @@ export function ChatDemo() {
           {({ files, setFiles }) => (
             <MessageInput
               value={value}
-              onChange={(event) => {
-                setValue(event.target.value);
-              }}
+              onChange={(event) => setValue(event.target.value)}
               allowAttachments={false}
-              // files={files}
-              // setFiles={setFiles}
-              stop={() => {
-                setIsGenerating(false);
-              }}
+              stop={() => setIsGenerating(false)}
               isGenerating={isGenerating}
-              // transcribeAudio={transcribeAudio}
             />
           )}
         </ChatForm>
       </div>
-    </>
+    </div>
   );
 }
